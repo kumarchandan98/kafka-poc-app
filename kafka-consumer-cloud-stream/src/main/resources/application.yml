@@ -1,33 +1,34 @@
-spring:
-  kafka:
-    consumer:
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: "*"
-    producer:
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: "*"
-spring.cloud.stream:
+spring.cloud:
   function:
-    definition: kStreamConsumer
-  bindings:
-    kStreamConsumer-in-0:
-      destination: test
-  kafka:
-    bindings:
-      kStreamConsumer-in-0:
-        consumer:
-          configuration:
-            value:
-              deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    binder:
-      consumer-properties:
-        spring.json.trusted.packages: com.ck.dev.kafkaconsumercloudstream.domain
+    definition: singleTopic_MultiplePartition;singleTopic_SinglePartition;multipleTopic_MultiplePartition
 
-      brokers:
-        - localhost:9092
+  stream:
+    bindings:
+      singleTopic_MultiplePartition-in-0:
+        destination: topic2_p2 # topic names
+        group: consumer-group-1-t1pn # consumer group for this consumer
+      singleTopic_SinglePartition-in-0:
+        destination: topic1_p1
+        group: consumer-group-1-t1p1
+      multipleTopic_MultiplePartition-in-0:
+        destination: topic2_p2,topic3_p3
+        group: consumer-group-1-tnpn
+
+    kafka:
+      streams:
+        bindings:
+          singleTopic_MultiplePartition-in-0:
+            consumer:
+              keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+          singleTopic_SinglePartition-in-0:
+            consumer:
+              keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+
+        binder:
+          brokers:
+            - localhost:9092
+
+
+
