@@ -1,0 +1,19 @@
+spring.cloud.stream:
+  function:
+    definition: messageConsumer
+  bindings:
+    messageConsumer-in-0:
+      destination: test
+  kafka:
+#    bindings:
+#      messageConsumer-in-0:
+#        consumer:
+#          configuration:
+#            value:
+#              deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    binder:
+      consumer-properties:
+        spring.json.trusted.packages: com.ck.dev.kafkaconsumercloudstream.domain
+
+      brokers:
+        - localhost:9092

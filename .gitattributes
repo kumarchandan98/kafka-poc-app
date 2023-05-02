@@ -1,0 +1,11 @@
+# Default everything to LF line endings
+* text eol=lf
+
+# Ensure batch files have crlf line endings
+*.bat text eol=crlf
+
+# Include the usual binary formats
+*.png binary
+*.jpg binary
+*.exe binary
+*.deb binary
