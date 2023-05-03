@@ -1,19 +1,47 @@
-spring.cloud.stream:
+spring.cloud:
   function:
-    definition: messageConsumer
-  bindings:
-    messageConsumer-in-0:
-      destination: test
-  kafka:
-#    bindings:
-#      messageConsumer-in-0:
-#        consumer:
-#          configuration:
-#            value:
-#              deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    binder:
-      consumer-properties:
-        spring.json.trusted.packages: com.ck.dev.kafkaconsumercloudstream.domain
+    definition: singleTopic_MultiplePartition;singleTopic_SinglePartition;multipleTopic_MultiplePartition
 
-      brokers:
-        - localhost:9092
+  stream:
+    bindings:
+      singleTopic_MultiplePartition-in-0:
+        destination: topic2_p2 # topic names
+        group: consumer-group-1-t1pn # consumer group for this consumer
+        consumer:
+          batch-mode: true
+      singleTopic_SinglePartition-in-0:
+        destination: topic1_p1
+        group: consumer-group-1-t1p1
+        consumer:
+          batch-mode: true
+      multipleTopic_MultiplePartition-in-0:
+        destination: topic2_p2,topic3_p3
+        group: consumer-group-1-tnpn
+        consumer:
+          batch-mode: true
+
+
+    kafka:
+      bindings:
+        singleTopic_SinglePartition-in-0:
+          consumer:
+            configuration:
+              max.poll.records: 100
+        singleTopic_MultiplePartition-in-0:
+          consumer:
+            configuration:
+              max.poll.records: 100
+        multipleTopic_MultiplePartition-in-0:
+          consumer:
+            configuration:
+              max.poll.records: 100
+      binder:
+        consumer-properties:
+          spring.json.trusted.packages: "*"
+          batch-mode: true
+          batch-size: 100
+        brokers:
+          - localhost:9092
+
+
+
