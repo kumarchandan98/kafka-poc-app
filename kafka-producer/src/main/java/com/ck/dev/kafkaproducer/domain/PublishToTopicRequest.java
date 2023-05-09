@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class PublishToTopicRequest {
 
     private String topicName;
-    private String message;
+    private Long fasaId;
+    private String filePath;
     private Integer count;
 }
